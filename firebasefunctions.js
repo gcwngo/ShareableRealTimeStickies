@@ -17,13 +17,12 @@ $(function() {
     messagingSenderId: "80849777732"
   };
 
-	//Creating the firebase reference.
-  //var firebaseref = new Firebase("https://dazzling-fire-8954.firebaseio.com/");
-  var rootRef = firebase.database().ref();
+	//Creating the firebase root reference.
+	var rootRef = firebase.database().ref();
 
 
 	//Global Variables for userData and the firebase reference to the list.
-  var listRef = null;
+	var listRef = null;
 	var userData = null;
 
 	//timer is used for few animations for the status messages.
@@ -144,7 +143,7 @@ $(function() {
 
 	//Setting the 3 firebase events to call different functions that handle the specific functionality of the app.
     var setUpFirebaseEvents = function() {
-        //listRef = new Firebase('https://dazzling-fire-8954.firebaseio.com/lists/sharedlist/items');
+
         listRef = firebase.database().ref('lists/sharedlist/items');
 
         $("#sharedlist").html('');
@@ -158,7 +157,7 @@ $(function() {
         listRef.on('child_removed', childRemovedFunction);
     }
 
-  //Setting up an observer on a signed-in user (Auth Object) aka authData
+	//Setting up an observer on a signed-in user (Auth Object) aka authData
 	//This function is a callback for ref.onAuth() and is triggered every time the login status of the user changes.
 	//This function is also called when the app is initialized (and hence helps you in maintaining the session for a user).
 
@@ -205,7 +204,7 @@ $(function() {
 
 
 
-  //Listen to Auth Changes
+	//Listener to Auth Changes
     //firebase.auth().onAuthStateChanged(authDataCallback);
 
 	//Event to handle click for Adding Items
@@ -220,7 +219,7 @@ $(function() {
         addListItem(content);
     });
 
-	//Handler for sorting the items in rows neatly!
+	//Handler for sorting the items in rows 
 	//I kept trying to keep them in formation so ended up adding a button for it :)
     $("#sort-items").on('click', function() {
         var leftcounter = 0;
@@ -358,6 +357,7 @@ var loginUser = function(email, password)
         var email = $("#email").val();
         var password = $("#password").val();
         firebase.auth().createUserWithEmailAndPassword(email, password);
+		//Temporarily excluded, callbacks not compatible with firebase 3.xx
         //addUserName(firebase.auth().currentUser.uid);
         // .catch(
         //
@@ -405,14 +405,12 @@ var loginUser = function(email, password)
 
 	//API call to remove items from Firebase
     var removeItemFromFirebase = function(key) {
-        //var itemRef = new Firebase('https://dazzling-fire-8954.firebaseio.com/lists/sharedlist/items/' + key);
         var itemRef = firebase.database().ref('lists/sharedlist/items');
         itemRef.child(key).remove();
     }
 
 	//API call to update the existing item in Firebase with the latest CSS string.
     var addCSSStringToItem = function(key, css) {
-        //var itemRef = new Firebase('https://dazzling-fire-8954.firebaseio.com/lists/sharedlist/items/' + key);
         var itemRef = firebase.database().ref('lists/sharedlist/items')
         itemRef.child(key).update({
             css: css,
